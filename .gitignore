@@ -1,3 +1,13 @@
+# CSV/XLS data
+*.xls
+*.csv
+
+# PyCharm files
+.idea/
+
+# Help-files for eNodes
+eNodeB V100R005C00SPC100 Performance Counter Reference(CHM)-EN/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
