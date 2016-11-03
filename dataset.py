@@ -1,14 +1,15 @@
 import csv
 import numpy as np
 
+# TODO: Sane helpstrings
 class Dataset():
 
     def __init__(self, filename):
         self.csv_filename = filename
+        self.data = None
         self.open_csv(self.csv_filename)
 
-    '''Opens the csv, supposedly separated by russian excel's disgusting ;-delimiter,
-    Probably should also replace all the comma-separators with dots along the way'''
+
     def open_csv(self, csv_filename):
         with open(csv_filename, 'r', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=';')
