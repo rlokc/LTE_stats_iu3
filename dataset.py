@@ -7,6 +7,7 @@ class Dataset():
     def __init__(self, filename):
         self.csv_filename = filename
         self.data = None
+        self.features = None
         self.open_csv(self.csv_filename)
 
 
@@ -18,13 +19,22 @@ class Dataset():
             print(col_names)
             datatypes = self.generate_datatypes(col_names)
             self.data = np.array([], dtype=datatypes)
+            self.features = np.empty((0, 17), float)
+            print(self.features)
             for row in reader:
                 row = [x.replace(",",".") for x in row]
                 row_printed = self.print_row(row)
                 if row_printed.strip() == "":
                     continue
+
                 arr = np.array(tuple(row), dtype=datatypes)
                 self.data = np.append(self.data, arr)
+
+                new_features = []
+                for el in row[2:]:
+                    new_features.append(float(el))
+                self.features = np.vstack([self.features, new_features])
+
 
 
     # Hardcoded for now, sadly
@@ -42,6 +52,9 @@ class Dataset():
         for x in range(9, len(names)):
             datatypes.append((names[x], 'f4'))
         return datatypes
+
+    def shuffle(self):
+        np.random.shuffle(self.data)
 
     def print_row(self, row):
         return " ".join(row)
