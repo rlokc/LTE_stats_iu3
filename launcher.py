@@ -10,10 +10,35 @@ class Launcher():
     def load_data(self, filename):
         self.analyzer.open(filename)
 
+    def test1(self):
+        useless = ['RegionID', 'resulttime', 'CellID',  'cnt_averload_cell']
+        analyzer.drop_unnecessary_columns(useless)
+        analyzer.create_model(ModelType.svc,
+                              analyzer.data,
+                              analyzer.data['L_Traffic_User_Avg'])
 
+        analyzer.aggregate_cv_score(analyzer.data,
+                                    analyzer.data['L_Traffic_User_Avg'])
+        print(analyzer.cv_scores)
 
+    def test2(self):
+        useless = ['RegionID', 'resulttime', 'CellID', 'L_Traffic_User_Avg']
+        analyzer.drop_unnecessary_columns(useless)
+        analyzer.create_model(ModelType.randforest,
+                              analyzer.data,
+                              analyzer.data['cnt_averload_cell'])
+
+        analyzer.aggregate_cv_score(analyzer.data,
+                                    analyzer.data['cnt_averload_cell'])
+        print(analyzer.cv_scores)
+        print(analyzer.models[0].feature_importances_)
 
 if __name__ == "__main__":
     launcher = Launcher()
     filename = "KRD.xls"
     launcher.load_data(filename)
+    analyzer = launcher.analyzer
+    launcher.test2()
+
+    # print(analyzer.data['DL_MCS_QPSK'].name)
+
