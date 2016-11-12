@@ -1,5 +1,5 @@
 # CSV/XLS data
-*.xls
+# *.xls
 *.csv
 
 # PyCharm files
