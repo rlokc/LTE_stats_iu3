@@ -51,6 +51,7 @@ class Stats_Analyzer():
         elif model_type == ModelType.logregression:
             model = LogisticRegression()
         if model is not None:
+            print(classifier)
             model.fit(features, classifier)
             self.models.append(model)
         else:
@@ -58,8 +59,6 @@ class Stats_Analyzer():
 
     def aggregate_cv_score(self, features, classifier, model_index = -1):
         features, classifier = Stats_Analyzer.remove_classifier(features, classifier)
-        print(features)
-        print(classifier)
         if model_index == -1:
             self.cv_scores = []
             for model in self.models:
