@@ -17,16 +17,17 @@ class LearningModel:
         self.model = self.determine_model_type(model_type)
         self.cv_score = None
         # Remove the classifier from the feature list, if it contains it
-        self.learning_features, self.learning_classifier = LearningModel.remove_classifier(learning_set)
+        self.features, self.classifier = LearningModel.remove_classifier(learning_set)
+        self.feature_names = self.features.columns
         self.fit_model()
         self.aggregate_cv_score()
 
     def fit_model(self):
         if self.model is not None:
-            self.model.fit(self.learning_features, self.learning_classifier)
+            self.model.fit(self.features, self.classifier)
 
     def aggregate_cv_score(self):
-        self.cv_score = cross_val_score(self.model, self.learning_features, self.learning_classifier, cv=5)
+        self.cv_score = cross_val_score(self.model, self.features, self.classifier, cv=5)
 
     @staticmethod
     def remove_classifier(learning_set):

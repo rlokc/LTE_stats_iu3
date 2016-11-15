@@ -1,6 +1,7 @@
 from LearningModel import ModelType
 from analyzer import Stats_Analyzer
 import numpy as np
+from Visualizer import Visualizer
 
 # matplotlib.rc('font', family='Arial')
 
@@ -30,6 +31,8 @@ class Launcher():
 
         print("Cross variation score:\n" + str(analyzer.models[0].cv_score))
         print("Feature importances:\n" + str(analyzer.models[0].model.feature_importances_))
+        print(analyzer.models[0].feature_names)
+        Visualizer.draw_class_scatter(analyzer.models[0])
 
 if __name__ == "__main__":
     launcher = Launcher()
