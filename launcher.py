@@ -1,4 +1,4 @@
-from analyzer import ModelType
+from LearningModel import ModelType
 from analyzer import Stats_Analyzer
 import numpy as np
 
@@ -18,9 +18,8 @@ class Launcher():
                               analyzer.data,
                               analyzer.data['L_Traffic_User_Avg'].astype(np.float))
 
-        analyzer.aggregate_cv_score(analyzer.data,
-                                    analyzer.data['L_Traffic_User_Avg'].astype(np.float))
-        print(analyzer.cv_scores)
+        print("Cross variation score:\n" + str(analyzer.models[0].cv_score))
+
 
     def test2(self):
         useless = ['RegionID', 'resulttime', 'CellID', 'L_Traffic_User_Avg']
@@ -29,18 +28,16 @@ class Launcher():
                               analyzer.data,
                               analyzer.data['cnt_averload_cell'])
 
-        analyzer.aggregate_cv_score(analyzer.data,
-                                    analyzer.data['cnt_averload_cell'])
-        print("Cross variation scores:\n" + str(analyzer.cv_scores))
-        print("Feature importances:\n" + str(analyzer.models[0].feature_importances_))
+        print("Cross variation score:\n" + str(analyzer.models[0].cv_score))
+        print("Feature importances:\n" + str(analyzer.models[0].model.feature_importances_))
 
 if __name__ == "__main__":
     launcher = Launcher()
     filename = "KRD.xls"
     launcher.load_data(filename)
     analyzer = launcher.analyzer
-    # launcher.test2()
-    launcher.test1()
+    launcher.test2()
+    # launcher.test1()
 
     # print(analyzer.data['DL_MCS_QPSK'].name)
 
