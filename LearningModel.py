@@ -1,6 +1,7 @@
 from enum import Enum
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
@@ -9,6 +10,7 @@ class ModelType(Enum):
     svc = 0
     randforest = 1
     logregression = 2
+    dectree = 3
 
 
 class LearningModel:
@@ -25,6 +27,7 @@ class LearningModel:
     def fit_model(self):
         if self.model is not None:
             self.model.fit(self.features, self.classifier)
+            print (self.model.feature_importances_)
 
     def aggregate_cv_score(self):
         self.cv_score = cross_val_score(self.model, self.features, self.classifier, cv=5)
@@ -37,6 +40,8 @@ class LearningModel:
                 features.drop(classifier, axis=1)
                 classifier = features[classifier]
         else:
+            print(features.columns)
+            print(classifier.name)
             if classifier.name in features.columns:
                 features = features.drop(classifier.name, axis=1)
         return (features, classifier)
@@ -48,6 +53,8 @@ class LearningModel:
             self.model = RandomForestClassifier()
         elif model_type == ModelType.logregression:
             self.model = LogisticRegression()
+        elif model_type == ModelType.dectree:
+            self.model = DecisionTreeClassifier()
         else:
             # TODO: make it into an exception
             print("No such type of regression")
