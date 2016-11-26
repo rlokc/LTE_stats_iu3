@@ -25,7 +25,7 @@ class Launcher():
     def test2(self):
         useless = ['RegionID', 'resulttime', 'CellID','PRB_DL_Used_Rate']
         analyzer.drop_unnecessary_columns(useless)
-        analyzer.create_model(ModelType.randforest,
+        analyzer.create_model(ModelType.logregression,
                               analyzer.data,
                               analyzer.data['cnt_averload_cell'])
 

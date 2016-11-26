@@ -9,7 +9,9 @@ from LearningModel import ModelType, LearningModel
 
 
 
-
+'''
+Wow this is a dirty hack
+'''
 def determine_type(filename):
     return filename[-3:]
 

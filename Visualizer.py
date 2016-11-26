@@ -18,6 +18,7 @@ class Visualizer:
         # Creating the coordinates matrix
         relevant_features = Visualizer.get_n_relevant_features(model, 2)
         features = [model.features[feature] for feature in relevant_features]
+
         X = np.column_stack(features)
         y = model.classifier
         # Set the boundaries of our plot
@@ -31,7 +32,7 @@ class Visualizer:
         # Since our model uses n features, but we can plot only for 2
         # we need to create a big matrix for n features, with only 2 relevant features included,
         # all the other one we fill with mean values
-        stub = Visualizer.create_stub_values(model.features, relevant_features, xx, yy)
+        stub = Visualizer.create_matrice_for_contour(model.features, relevant_features, xx, yy)
         # print(stub)
         # Depending on the clacifier type, call different functions for the probability countoure
         # for some reason, decision_function isn't always accurate (especially for SCV models)
@@ -54,12 +55,38 @@ class Visualizer:
         plt.show()
 
 
+    @staticmethod
+    def get_n_relevant_features(model, n):
+        if hasattr(model.model, "feature_importances_"):
+            scores = model.model.feature_importances_
+            sorted_features = [feature for (score, feature) in sorted(zip(scores, model.features),reverse=True)]
+            return sorted_features[:n]
+        else:
+            return(Visualizer.get_features_from_user(model))
+
+    @staticmethod
+    def get_features_from_user(model):
+        feature_names = model.features.columns
+
+        prompt = """
+Can't determine two most relevant features
+Enter the numbers of the features you want to see, separated by space
+"""
+        for index, name in enumerate(feature_names):
+            s = "{}: {}\n".format(index, name)
+            prompt += s
+        print(prompt)
+        ans = input().split(' ')
+        print(ans)
+        return [feature_names[int(x)] for x in ans]
+
     '''
-    Returns an array of 2 passed features listed as-is
+    Returns a matrice that consists of two features replaced with values for the contour plot
+    (from x_min x_max, to determine the probability of classification in each point)
     With all the others replaced by their means
     '''
     @staticmethod
-    def create_stub_values(features, valuable, xx, yy):
+    def create_matrice_for_contour(features, valuable, xx, yy):
         res = None
         len = xx.shape[0] * xx.shape[1]
         for feature in features:
@@ -80,15 +107,3 @@ class Visualizer:
                     res = np.c_[res, values.ravel()]
         return res
 
-    @staticmethod
-    def get_n_relevant_features(model, n):
-        if hasattr(model.model, "feature_importances_"):
-            scores = model.model.feature_importances_
-            # sorted_features = sorted(model.features, key=lambda score: scores)
-            sorted_features = [feature for (score, feature) in sorted(zip(scores, model.features),reverse=True)]
-            # print("Features and scores:", model.features.columns, scores, "\n Sorted by score:", sorted_features)
-            # print("Relevant features: ", sorted_features[:n])
-            return sorted_features[:n]
-        else:
-            print("MODEL DOESN'T HAVE FEATURE_IMPORTANCES_ FIELD")
-            return None

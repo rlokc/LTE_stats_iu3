@@ -27,7 +27,7 @@ class LearningModel:
     def fit_model(self):
         if self.model is not None:
             self.model.fit(self.features, self.classifier)
-            print (self.model.feature_importances_)
+            # print (self.model.feature_importances_)
 
     def aggregate_cv_score(self):
         self.cv_score = cross_val_score(self.model, self.features, self.classifier, cv=5)
