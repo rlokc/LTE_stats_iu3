@@ -12,7 +12,7 @@ class ModelType(Enum):
     logregression = 2
     dectree = 3
 
-
+# TODO: use decorators for properties
 class LearningModel:
 
     def __init__(self, model_type, learning_set):
