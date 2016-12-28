@@ -15,16 +15,16 @@ class ModelType(Enum):
 # TODO: use decorators for properties
 class LearningModel:
 
-    def __init__(self, model_type, learning_set):
-        self.model = self.determine_model_type(model_type)
+    def __init__(self, model_type, arguments, learning_set):
+        self.model = self.determine_model_type(model_type, arguments)
         self.cv_score = None
         # Remove the classifier from the feature list, if it contains it
         self.features, self.classifier = LearningModel.remove_classifier(learning_set)
         self.feature_names = self.features.columns
-        self.fit_model()
+        self.fit_model(arguments)
         self.aggregate_cv_score()
 
-    def fit_model(self):
+    def fit_model(self, kwargs):
         if self.model is not None:
             self.model.fit(self.features, self.classifier)
             # print (self.model.feature_importances_)
@@ -46,15 +46,15 @@ class LearningModel:
                 features = features.drop(classifier.name, axis=1)
         return (features, classifier)
 
-    def determine_model_type(self, model_type):
+    def determine_model_type(self, model_type, kwargs):
         if model_type == ModelType.svc:
-            self.model = SVC()
+            self.model = SVC(**kwargs)
         elif model_type == ModelType.randforest:
-            self.model = RandomForestClassifier()
+            self.model = RandomForestClassifier(**kwargs)
         elif model_type == ModelType.logregression:
-            self.model = LogisticRegression()
+            self.model = LogisticRegression(**kwargs)
         elif model_type == ModelType.dectree:
-            self.model = DecisionTreeClassifier()
+            self.model = DecisionTreeClassifier(**kwargs)
         else:
             # TODO: make it into an exception
             print("No such type of regression")

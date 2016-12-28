@@ -1,3 +1,11 @@
 {
-  "test" : "Hello world!"
+  "welcome_string" : "Statistical machine learning tool made for determining the load of LTE eNodeB",
+  "main_functions" :[
+    "new", "load", "draw"
+  ],
+  "function_descriptions" : {
+    "new": "create a new model",
+    "load": "load a model from file",
+    "draw": "draw some plots for your model"
+  }
 }

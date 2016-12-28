@@ -37,8 +37,8 @@ class Stats_Analyzer():
         for column in column_names:
             self.data = self.data.drop(column, axis=1)
 
-    def create_model(self, model_type, features, classifier, **kwargs):
-        self.models.append(LearningModel(model_type, (features, classifier)))
+    def create_model(self, model_type, arguments, features, classifier):
+        self.models.append(LearningModel(model_type, arguments, (features, classifier)))
 
 
     def draw_model(self, model):

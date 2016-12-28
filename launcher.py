@@ -11,18 +11,17 @@ class Launcher():
         self.analyzer = Stats_Analyzer()
         self.settings = Settings()
 
+    '''
+    Currently a stub, probably will add an interactive mode later
+    '''
     def run(self):
         self.launch_state()
 
     def launch_state(self):
-        # WELCOME_STRING = \
-        #         """
-        #         Statistical machine learning tool made for determining the load of LTE eNodeB
-        #         This is a multiline string
-        #         Sadly, it doesn't work as I want it to, because of.
-        #         <----- This shit :C
-        #         """
-        print(self.settings.test)
+        print(self.settings.welcome_string)
+        for function in self.settings.main_functions:
+            print("{} -- {}".format(function, self.settings.function_descriptions[function]))
+
 
     def load_data(self, filename):
         self.analyzer.open(filename)
@@ -30,7 +29,9 @@ class Launcher():
     def test1(self):
         useless = ['RegionID', 'resulttime', 'CellID',  'cnt_averload_cell']
         analyzer.drop_unnecessary_columns(useless)
+        arguments = {"C": 0.8, "kernel": 'linear'}
         analyzer.create_model(ModelType.svc,
+                              arguments,
                               analyzer.data,
                               analyzer.data['L_Traffic_User_Avg'].astype(np.float))
 
@@ -40,7 +41,9 @@ class Launcher():
     def test2(self):
         useless = ['RegionID', 'resulttime', 'CellID','PRB_DL_Used_Rate']
         analyzer.drop_unnecessary_columns(useless)
+        arguments = {"C": 0.3}
         analyzer.create_model(ModelType.logregression,
+                              arguments,
                               analyzer.data,
                               analyzer.data['cnt_averload_cell'])
 
@@ -52,10 +55,12 @@ class Launcher():
     def test3(self):
         classifier = "DL_MCS_64QAM"
         # TODO: redo it, so it doesn't delete the classifier from the dataset, what if you want to reuse it?
-        classifier_values = analyzer.data[classifier].values
+        classifier_values = analyzer.data[classifier]
+        arguments = {"C": 0.8, "kernel":'linear'}
         useless = ['RegionID', 'resulttime', 'CellID', 'cnt_averload_cell', classifier]
         analyzer.drop_unnecessary_columns(useless)
         analyzer.create_model(ModelType.svc,
+                              arguments,
                               analyzer.data,
                               classifier_values)
 
@@ -68,7 +73,7 @@ if __name__ == "__main__":
     launcher = Launcher()
     # Launch interactive mode
     # TODO: make a quick way to pass all the parameters through the state machine (args would be super useful)
-    launcher.run()
+    # launcher.run()
     filename = "KRD.xls"
     launcher.load_data(filename)
     analyzer = launcher.analyzer
